@@ -49,8 +49,10 @@
     <Compile Include="TI\Difference.cs" />
     <Compile Include="TI\ExponentialMovingAverage.cs" />
     <Compile Include="TI\MACD.cs" />
+    <Compile Include="TI\ROI.cs" />
     <Compile Include="TI\SimpleMovingAverage.cs" />
     <Compile Include="TI\StdVar.cs" />
+    <Compile Include="TI\Volatility.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
