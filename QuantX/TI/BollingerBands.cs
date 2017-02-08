@@ -55,8 +55,8 @@ namespace QuantX.TI {
             _K = K;
             _MA = SimpleMovingAverage.GetInstance(TI, N);
             _STDVAR = StdVar.GetInstance(TI, N);
-            _TI.OnData += main;
-            _MA.OnData += main;
+            //_TI.OnData += main;
+            //_MA.OnData += main;
             _STDVAR.OnData += main;
         }
 

@@ -22,9 +22,8 @@ namespace QuantX.TI {
         }
 
         private void main (object sender, double e) {
-            int c = bufHistory.Count;
-            var cc = (new int[2] { _TI1.History.Count, _TI2.History.Count }).Min();
-            for (int i = c; i < cc; i++) {
+            var cc = Math.Min(_TI1.History.Count, _TI2.History.Count);
+            for (int i = bufHistory.Count; i < cc; i++) {
                 bufHistory.Add(_TI1.History[i] - _TI2.History[i]);
                 OnData?.Invoke(this, bufHistory.Last());
             }
