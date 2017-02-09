@@ -23,5 +23,41 @@ namespace QuantX {
                 yield return list[i];
             }
         }
+        /// <summary>
+        /// 惰性逆向获取只读列表。
+        /// </summary>
+        /// <typeparam name="T">列表元素类型</typeparam>
+        /// <param name="list">只读列表</param>
+        /// <returns>枚举器</returns>
+        public static IEnumerable<T> Reverse<T> (this IReadOnlyList<T> list) {
+            for (int i = list.Count - 1; i >= 0; i--) {
+                yield return list[i];
+            }
+        }
+        /// <summary>
+        /// 惰性获取左开右闭区间
+        /// </summary>
+        /// <typeparam name="T">元素类型</typeparam>
+        /// <param name="list">只读列表</param>
+        /// <param name="left">左端点</param>
+        /// <param name="right">右端点</param>
+        /// <returns></returns>
+        public static IEnumerable<T> Range<T> (this IReadOnlyList<T> list, int left, int right) {
+            for (int i = left; i < right; i++) {
+                yield return list[i];
+            }
+        }
+        /// <summary>
+        /// 从 index 开始往回取元素
+        /// </summary>
+        /// <typeparam name="T">类型</typeparam>
+        /// <param name="list">只读列表</param>
+        /// <param name="index">索引号</param>
+        /// <returns>枚举器</returns>
+        public static IEnumerable<T> ReverseAt<T> (this IReadOnlyList<T> list, int index) {
+            for (int i = Math.Min(index, list.Count - 1); i >= 0; i--) {
+                yield return list[i];
+            }
+        }
     }
 }

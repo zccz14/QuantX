@@ -21,16 +21,15 @@ namespace QuantX.TI {
         }
 
         private void main (object sender, double e) {
-            int c = bufHistory.Count;
-            int c1 = _TI.History.Count;
-            int c2 = _MA.History.Count;
-            if (c == c1 || c == c2) {
-                return;
-            }
-            int cc = Math.Min(c1, c2);
-            for (int i = c; i < cc; i++) {
+            int cc = Math.Min(_TI.History.Count, _MA.History.Count);
+            for (int i = bufHistory.Count; i < cc; i++) {
                 var avg = _MA.History[i];
-                var stdVar = Math.Sqrt(_TI.History.Last(_N, cc - 1 - i).Aggregate(0.0, (prev, next) => prev + Math.Pow(next - avg, 2)));
+                var stdVar = Math.Sqrt(
+                    _TI.History
+                    .ReverseAt(i)
+                    .Take(_N)
+                    .Select(v => v - avg)
+                    .Sum(v => v * v) / (_N - 1));
                 bufHistory.Add(stdVar);
                 OnData?.Invoke(this, bufHistory.Last());
             }

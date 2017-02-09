@@ -38,6 +38,10 @@ namespace QuantX.TI {
         /// 通道宽度
         /// </summary>
         public double Width { get { return Upper - Lower; } }
+        /// <summary>
+        /// 宽度比例
+        /// </summary>
+        public double Ratio { get { return Width / Middle; } }
     }
     /// <summary>
     /// Boll 指标
@@ -96,6 +100,14 @@ namespace QuantX.TI {
             }
         }
         /// <summary>
+        /// 实例池
+        /// </summary>
+        public static IEnumerable<BollingerBands> Instances {
+            get {
+                return _instances;
+            }
+        }
+        /// <summary>
         /// 新的 Boll 数据发生事件
         /// </summary>
         public event EventHandler<BollingerBandsData> OnData;
@@ -105,6 +117,7 @@ namespace QuantX.TI {
         private double _K;
         private SimpleMovingAverage _MA;
         private StdVar _STDVAR;
+
         private static HashSet<BollingerBands> _instances = new HashSet<BollingerBands>();
     }
 }
