@@ -42,6 +42,12 @@ namespace QuantX.TI {
         }
         private static HashSet<SimpleMovingAverage> _instances = new HashSet<SimpleMovingAverage>();
         /// <summary>
+        /// 实例池
+        /// </summary>
+        public static IEnumerable<SimpleMovingAverage> Instances {
+            get { return _instances; }
+        }
+        /// <summary>
         /// 历史数据
         /// </summary>
         public IReadOnlyList<double> History {
@@ -49,6 +55,7 @@ namespace QuantX.TI {
                 return bufHistory;
             }
         }
+
         /// <summary>
         /// 输出均线数据的事件
         /// </summary>

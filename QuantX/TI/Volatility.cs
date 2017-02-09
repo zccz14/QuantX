@@ -25,9 +25,25 @@ namespace QuantX.TI {
             //_Open.OnData += main;
             //_Close.OnData += main;
             //_LogROI.OnData += main;
-            _StdVarLogROI.OnData += main;
+            _StdVarLogROI.OnData += main; 
         }
-
+        /// <summary>
+        /// 获取 波动率 指标实例
+        /// </summary>
+        /// <param name="Open">开盘价</param>
+        /// <param name="Close">收盘价</param>
+        /// <param name="period">周期</param>
+        /// <returns></returns>
+        public static Volatility GetInstance(ITI<double> Open, ITI<double> Close, int period) {
+            foreach (var x in _instances) {
+                if (Open.Equals(x._Open) && Close.Equals(x._Close) && period.Equals(x._period)) {
+                    return x;
+                }
+            }
+            var ins = new Volatility(Open, Close, period);
+            _instances.Add(ins);
+            return ins;
+        }
         private void main (object sender, double e) {
             if (_LogROI.History.Count % _period == 0) {
                 bufHistory.Add(_StdVarLogROI.History.Last() * Math.Sqrt(_period));
@@ -53,5 +69,7 @@ namespace QuantX.TI {
         private ITI<double> _Close;
         private int _period;
         private StdVar _StdVarLogROI;
+
+        private static HashSet<Volatility> _instances = new HashSet<Volatility>();
     }
 }
