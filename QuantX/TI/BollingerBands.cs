@@ -69,7 +69,7 @@ namespace QuantX.TI {
             for (int i = bufHistory.Count; i < cc; i++) {
                 double avg = _MA.History[i];
                 double stdVar = _STDVAR.History[i];
-                bufHistory.Add(new BollingerBandsData(avg + stdVar, avg, avg - stdVar));
+                bufHistory.Add(new BollingerBandsData(avg + _K * stdVar, avg, avg - _K * stdVar));
                 OnData?.Invoke(this, bufHistory.Last());
             }
         }
