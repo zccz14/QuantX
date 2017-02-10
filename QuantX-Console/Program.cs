@@ -10,7 +10,7 @@ namespace QuantX_Console {
         static void Main (string[] args) {
             var iS = new Sequence<double>();
             SimpleMovingAverage.GetInstance(iS, 20).OnData += (sender, e) => {
-                Console.WriteLine("SMA20 Data => {0}", e);
+                Console.WriteLine("{1} Data => {0}", e, sender);
             };
             StdVar.GetInstance(iS, 20).OnData += (sender, e) => {
                 Console.WriteLine("StdVar => {0}", e);

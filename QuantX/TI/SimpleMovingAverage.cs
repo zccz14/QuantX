@@ -63,5 +63,12 @@ namespace QuantX.TI {
         private List<double> bufHistory = new List<double>();
         private ITI<double> _TI;
         private int _period;
+        /// <summary>
+        /// 转换成字符串
+        /// </summary>
+        /// <returns>转换成字符串</returns>
+        public override string ToString() {
+            return string.Format("SMA({0}, {1})", _TI, _period);
+        }
     }
 }
