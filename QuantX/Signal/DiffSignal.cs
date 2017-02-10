@@ -43,8 +43,8 @@ namespace QuantX.Signal {
 
         private void main (object sender, double data) {
             int count = Math.Min(period, bufHistory.Count + 1 - _lastCount);
-            double high = (sender as ITI<double>).History.Last(count).Max();
-            double low = (sender as ITI<double>).History.Last(count).Min();
+            double high = Source.History.Last(count).Max();
+            double low = Source.History.Last(count).Min();
             bufHistory.Add(high - data > diff || data - low > diff);
             if (bufHistory.Last()) {
                 _lastCount = bufHistory.Count;
