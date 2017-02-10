@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace QuantX {
+namespace QuantX.TI {
     /// <summary>
     /// 超级 Bar 类
     /// </summary>
