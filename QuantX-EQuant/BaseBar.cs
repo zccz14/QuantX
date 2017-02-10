@@ -12,7 +12,8 @@ namespace QuantX.TI {
         /// </summary>
         /// <param name="exe">Handler</param>
         public BaseBar (EQuant.STG.ContractExecuter exe) {
-            exe.OnBar += main;
+            _exe = exe;
+            _exe.OnBar += main;
         }
 
         private void main (object sender, EQuant.STG.PushBarEventArgs e) {
@@ -32,5 +33,26 @@ namespace QuantX.TI {
         /// </summary>
         public event EventHandler<EQuant.BarType> OnData;
         private List<EQuant.BarType> bufHistory = new List<EQuant.BarType>();
+        private EQuant.STG.ContractExecuter _exe;
+        /// <summary>
+        /// 获取 BaseBar 实例
+        /// </summary>
+        /// <param name="exe">合约执行器</param>
+        /// <returns>BaseBar 实例</returns>
+        public static BaseBar GetInstance (EQuant.STG.ContractExecuter exe) {
+            foreach (var x in _instances) {
+                if (exe.Equals(x._exe)) {
+                    return x;
+                }
+            }
+            var ins = new BaseBar(exe);
+            _instances.Add(ins);
+            return ins;
+        }
+        /// <summary>
+        /// 实例池
+        /// </summary>
+        public static IEnumerable<BaseBar> Instances { get { return _instances; } }
+        private static HashSet<BaseBar> _instances = new HashSet<BaseBar>();
     }
 }
