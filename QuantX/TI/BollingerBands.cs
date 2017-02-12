@@ -121,3 +121,17 @@ namespace QuantX.TI {
         private static HashSet<BollingerBands> _instances = new HashSet<BollingerBands>();
     }
 }
+namespace QuantX {
+    public static partial class Extension {
+        /// <summary>
+        /// 获取 Boll 指标
+        /// </summary>
+        /// <param name="ti">基础指标</param>
+        /// <param name="N">周期</param>
+        /// <param name="K">标准差倍数</param>
+        /// <returns>Boll 指标实例</returns>
+        public static TI.BollingerBands Boll (this ITI<double> ti, int N, double K) {
+            return TI.BollingerBands.GetInstance(ti, N, K);
+        }
+    }
+}

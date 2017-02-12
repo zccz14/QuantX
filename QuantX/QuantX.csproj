@@ -42,10 +42,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IClock.cs" />
     <Compile Include="ITI.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Extension.cs" />
     <Compile Include="Signal\BollOpenSignal.cs" />
+    <Compile Include="Signal\DelaySignal.cs" />
     <Compile Include="Signal\DiffSignal.cs" />
     <Compile Include="TI\BollingerBands.cs" />
     <Compile Include="TI\Difference.cs" />
