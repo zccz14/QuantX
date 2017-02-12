@@ -12,7 +12,7 @@ namespace QuantX.TI {
         /// </summary>
         /// <param name="TI">基础指标</param>
         /// <param name="period">周期</param>
-        public SimpleMovingAverage(ITI<double> TI, int period) {
+        public SimpleMovingAverage (ITI<double> TI, int period) {
             _TI = TI;
             _period = period;
             TI.OnData += main;
@@ -30,8 +30,8 @@ namespace QuantX.TI {
         /// <param name="TI">基础指标</param>
         /// <param name="period">周期</param>
         /// <returns>SMA 实例</returns>
-        public static SimpleMovingAverage GetInstance(ITI<double> TI, int period) {
-            foreach(var x in _instances) {
+        public static SimpleMovingAverage GetInstance (ITI<double> TI, int period) {
+            foreach (var x in _instances) {
                 if (TI.Equals(x._TI) && period.Equals(x._period)) {
                     return x;
                 }
@@ -63,5 +63,27 @@ namespace QuantX.TI {
         private List<double> bufHistory = new List<double>();
         private ITI<double> _TI;
         private int _period;
+        /// <summary>
+        /// 转换成字符串
+        /// </summary>
+        /// <returns>转换成字符串</returns>
+        public override string ToString () {
+            return string.Format("SMA({0}, {1})", _TI, _period);
+        }
+    }
+}
+
+namespace QuantX {
+    using TI;
+    public static partial class Extension {
+        /// <summary>
+        /// 获取指标的 SMA
+        /// </summary>
+        /// <param name="TI">基础指标</param>
+        /// <param name="period">周期</param>
+        /// <returns>SMA 实例</returns>
+        public static SimpleMovingAverage SMA (this ITI<double> TI, int period) {
+            return SimpleMovingAverage.GetInstance(TI, period);
+        }
     }
 }

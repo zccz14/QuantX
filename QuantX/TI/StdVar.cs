@@ -69,3 +69,16 @@ namespace QuantX.TI {
         private static HashSet<StdVar> _instances = new HashSet<StdVar>();
     }
 }
+namespace QuantX {
+    public static partial class Extension {
+        /// <summary>
+        /// 获取指标的标准差指标
+        /// </summary>
+        /// <param name="ti">指标</param>
+        /// <param name="period">周期</param>
+        /// <returns>标准差指标</returns>
+        public static TI.StdVar StdVar(this ITI<double> ti, int period) {
+            return TI.StdVar.GetInstance(ti, period);
+        }
+    }
+}

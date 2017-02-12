@@ -69,7 +69,7 @@ namespace QuantX.TI {
             for (int i = bufHistory.Count; i < cc; i++) {
                 double avg = _MA.History[i];
                 double stdVar = _STDVAR.History[i];
-                bufHistory.Add(new BollingerBandsData(avg + stdVar, avg, avg - stdVar));
+                bufHistory.Add(new BollingerBandsData(avg + _K * stdVar, avg, avg - _K * stdVar));
                 OnData?.Invoke(this, bufHistory.Last());
             }
         }
@@ -119,5 +119,19 @@ namespace QuantX.TI {
         private StdVar _STDVAR;
 
         private static HashSet<BollingerBands> _instances = new HashSet<BollingerBands>();
+    }
+}
+namespace QuantX {
+    public static partial class Extension {
+        /// <summary>
+        /// 获取 Boll 指标
+        /// </summary>
+        /// <param name="ti">基础指标</param>
+        /// <param name="N">周期</param>
+        /// <param name="K">标准差倍数</param>
+        /// <returns>Boll 指标实例</returns>
+        public static TI.BollingerBands Boll (this ITI<double> ti, int N, double K) {
+            return TI.BollingerBands.GetInstance(ti, N, K);
+        }
     }
 }
