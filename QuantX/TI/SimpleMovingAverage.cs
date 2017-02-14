@@ -19,8 +19,11 @@ namespace QuantX.TI {
         }
 
         private void main (object sender, double e) {
-            bufHistory.Add(_TI.History.Last(_period).Average());
-            OnData?.Invoke(this, bufHistory.Last());
+            int cc = _TI.History.Count;
+            for (int i = bufHistory.Count; i < cc; i++) {
+                bufHistory.Add(_TI.History.Last(_period).Average());
+                OnData?.Invoke(this, bufHistory.Last());
+            }
         }
 
         /// <summary>
@@ -55,6 +58,13 @@ namespace QuantX.TI {
                 return bufHistory;
             }
         }
+        /// <summary>
+        /// 隐式转换：取当前的指标值
+        /// </summary>
+        /// <param name="TI">指标</param>
+        public static implicit operator double(SimpleMovingAverage TI) {
+            return TI.History.LastOrDefault();
+        }
 
         /// <summary>
         /// 输出均线数据的事件
@@ -68,7 +78,7 @@ namespace QuantX.TI {
         /// </summary>
         /// <returns>转换成字符串</returns>
         public override string ToString () {
-            return string.Format("SMA({0}, {1})", _TI, _period);
+            return string.Format("{0}.SMA({1})", _TI, _period);
         }
     }
 }
