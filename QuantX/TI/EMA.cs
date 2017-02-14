@@ -61,3 +61,16 @@ namespace QuantX.TI {
         private int _N;
     }
 }
+namespace QuantX {
+    public static partial class Extension {
+        /// <summary>
+        /// 链式构造 EMA
+        /// </summary>
+        /// <param name="Source">源</param>
+        /// <param name="Period">周期</param>
+        /// <returns>EMA 实例</returns>
+        public static TI.EMA EMA (this ITI<double> Source, int Period) {
+            return TI.EMA.GetInstance(Source, Period);
+        }
+    }
+}
