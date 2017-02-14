@@ -21,10 +21,10 @@ namespace QuantX.TI {
             _Fast = Fast;
             _Slow = Slow;
             _Diff = Diff;
-            _FEMA = EMA.GetInstance(_TI, _Fast);
-            _SEMA = EMA.GetInstance(_TI, _Slow);
+            _FEMA = _TI.EMA(_Fast);
+            _SEMA = _TI.EMA(_Slow);
             _DIFF = Difference.GetInstance(_FEMA, _SEMA);
-            _DEA = EMA.GetInstance(_DIFF, _Diff);
+            _DEA = _DIFF.EMA(_Diff);
             _MACD = Difference.GetInstance(_DIFF, _DEA);
             //_TI.OnData += main;
             //_FEMA.OnData += main;
