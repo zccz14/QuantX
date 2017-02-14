@@ -108,3 +108,23 @@ namespace QuantX.TI {
         private static HashSet<OpenPrice> _instances = new HashSet<OpenPrice>();
     }
 }
+namespace QuantX {
+    public static partial class Extension {
+        /// <summary>
+        /// 链式构造：OpenPrice
+        /// </summary>
+        /// <param name="Source">源</param>
+        /// <returns>OpenPrice 实例</returns>
+        public static TI.OpenPrice OpenPrice (this ITI<EQuant.BarType> Source) {
+            return TI.OpenPrice.GetInstance(Source);
+        }
+        /// <summary>
+        /// 链式构造：ClosePrice
+        /// </summary>
+        /// <param name="Source">源</param>
+        /// <returns>ClosePrice 实例</returns>
+        public static TI.ClosePrice ClosePrice (this ITI<EQuant.BarType> Source) {
+            return TI.ClosePrice.GetInstance(Source);
+        }
+    }
+}
