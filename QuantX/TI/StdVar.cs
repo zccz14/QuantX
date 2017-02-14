@@ -15,7 +15,7 @@ namespace QuantX.TI {
         public StdVar(ITI<double> TI, int N) {
             _TI = TI;
             _N = N;
-            _MA = SimpleMovingAverage.GetInstance(TI, N);
+            _MA = SMA.GetInstance(TI, N);
             //_TI.OnData += main;
             _MA.OnData += main;
         }
@@ -65,7 +65,7 @@ namespace QuantX.TI {
         private List<double> bufHistory = new List<double>();
         private int _N;
         private ITI<double> _TI;
-        private SimpleMovingAverage _MA;
+        private SMA _MA;
         private static HashSet<StdVar> _instances = new HashSet<StdVar>();
     }
 }

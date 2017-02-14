@@ -49,14 +49,14 @@
     <Compile Include="Signal\BollOpenSignal.cs" />
     <Compile Include="Signal\DelaySignal.cs" />
     <Compile Include="Signal\DiffSignal.cs" />
-    <Compile Include="TI\BollingerBands.cs" />
+    <Compile Include="TI\Boll.cs" />
     <Compile Include="TI\Difference.cs" />
-    <Compile Include="TI\ExponentialMovingAverage.cs" />
+    <Compile Include="TI\EMA.cs" />
     <Compile Include="TI\MACD.cs" />
     <Compile Include="TI\PC.cs" />
     <Compile Include="TI\ROI.cs" />
     <Compile Include="TI\Sequence.cs" />
-    <Compile Include="TI\SimpleMovingAverage.cs" />
+    <Compile Include="TI\SMA.cs" />
     <Compile Include="TI\StdVar.cs" />
     <Compile Include="TI\Volatility.cs" />
   </ItemGroup>

@@ -6,13 +6,13 @@ namespace QuantX.TI {
     /// <summary>
     /// 简单移动平均线
     /// </summary>
-    public class SimpleMovingAverage : ITI<double> {
+    public class SMA : ITI<double> {
         /// <summary>
         /// 基于 TI 上的 period 周期的简单移动平均线
         /// </summary>
         /// <param name="TI">基础指标</param>
         /// <param name="period">周期</param>
-        public SimpleMovingAverage (ITI<double> TI, int period) {
+        public SMA (ITI<double> TI, int period) {
             _TI = TI;
             _period = period;
             TI.OnData += main;
@@ -33,21 +33,21 @@ namespace QuantX.TI {
         /// <param name="TI">基础指标</param>
         /// <param name="period">周期</param>
         /// <returns>SMA 实例</returns>
-        public static SimpleMovingAverage GetInstance (ITI<double> TI, int period) {
+        public static SMA GetInstance (ITI<double> TI, int period) {
             foreach (var x in _instances) {
                 if (TI.Equals(x._TI) && period.Equals(x._period)) {
                     return x;
                 }
             }
-            var res = new SimpleMovingAverage(TI, period);
+            var res = new SMA(TI, period);
             _instances.Add(res);
             return res;
         }
-        private static HashSet<SimpleMovingAverage> _instances = new HashSet<SimpleMovingAverage>();
+        private static HashSet<SMA> _instances = new HashSet<SMA>();
         /// <summary>
         /// 实例池
         /// </summary>
-        public static IEnumerable<SimpleMovingAverage> Instances {
+        public static IEnumerable<SMA> Instances {
             get { return _instances; }
         }
         /// <summary>
@@ -62,7 +62,7 @@ namespace QuantX.TI {
         /// 隐式转换：取当前的指标值
         /// </summary>
         /// <param name="TI">指标</param>
-        public static implicit operator double(SimpleMovingAverage TI) {
+        public static implicit operator double(SMA TI) {
             return TI.History.LastOrDefault();
         }
 
@@ -84,7 +84,6 @@ namespace QuantX.TI {
 }
 
 namespace QuantX {
-    using TI;
     public static partial class Extension {
         /// <summary>
         /// 获取指标的 SMA
@@ -92,8 +91,8 @@ namespace QuantX {
         /// <param name="TI">基础指标</param>
         /// <param name="period">周期</param>
         /// <returns>SMA 实例</returns>
-        public static SimpleMovingAverage SMA (this ITI<double> TI, int period) {
-            return SimpleMovingAverage.GetInstance(TI, period);
+        public static TI.SMA SMA (this ITI<double> TI, int period) {
+            return QuantX.TI.SMA.GetInstance(TI, period);
         }
     }
 }

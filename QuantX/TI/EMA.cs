@@ -8,13 +8,13 @@ namespace QuantX.TI {
     /// <summary>
     /// 指数移动平均指标类
     /// </summary>
-    public class ExponentialMovingAverage : ITI<double> {
+    public class EMA : ITI<double> {
         /// <summary>
         /// 基于 TI，构造周期为 N 的指数移动平均指标
         /// </summary>
         /// <param name="TI">基础指标</param>
         /// <param name="N">周期</param>
-        public ExponentialMovingAverage(ITI<double> TI, int N) {
+        public EMA(ITI<double> TI, int N) {
             _TI = TI;
             _N = N;
             _TI.OnData += main;
@@ -33,17 +33,17 @@ namespace QuantX.TI {
         /// <param name="TI">基础指标</param>
         /// <param name="N">周期</param>
         /// <returns>EMA 实例</returns>
-        public static ExponentialMovingAverage GetInstance(ITI<double> TI, int N) {
+        public static EMA GetInstance(ITI<double> TI, int N) {
             foreach (var x in _instances) {
                 if (TI.Equals(x._TI) && N.Equals(x._N)) {
                     return x;
                 }
             }
-            var res = new ExponentialMovingAverage(TI, N);
+            var res = new EMA(TI, N);
             _instances.Add(res);
             return res;
         }
-        private static HashSet<ExponentialMovingAverage> _instances = new HashSet<ExponentialMovingAverage>();
+        private static HashSet<EMA> _instances = new HashSet<EMA>();
         /// <summary>
         /// 历史数据
         /// </summary>

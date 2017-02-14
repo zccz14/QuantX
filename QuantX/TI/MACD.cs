@@ -21,10 +21,10 @@ namespace QuantX.TI {
             _Fast = Fast;
             _Slow = Slow;
             _Diff = Diff;
-            _FEMA = ExponentialMovingAverage.GetInstance(_TI, _Fast);
-            _SEMA = ExponentialMovingAverage.GetInstance(_TI, _Slow);
+            _FEMA = EMA.GetInstance(_TI, _Fast);
+            _SEMA = EMA.GetInstance(_TI, _Slow);
             _DIFF = Difference.GetInstance(_FEMA, _SEMA);
-            _DEA = ExponentialMovingAverage.GetInstance(_DIFF, _Diff);
+            _DEA = EMA.GetInstance(_DIFF, _Diff);
             _MACD = Difference.GetInstance(_DIFF, _DEA);
             //_TI.OnData += main;
             //_FEMA.OnData += main;
@@ -59,10 +59,10 @@ namespace QuantX.TI {
         private int _Fast;
         private int _Slow;
         private int _Diff;
-        private ExponentialMovingAverage _FEMA;
-        private ExponentialMovingAverage _SEMA;
+        private EMA _FEMA;
+        private EMA _SEMA;
         private Difference _DIFF;
-        private ExponentialMovingAverage _DEA;
+        private EMA _DEA;
         private Difference _MACD;
     }
     /// <summary>

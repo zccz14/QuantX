@@ -14,7 +14,7 @@ namespace QuantX.Signal {
         /// </summary>
         /// <param name="Boll">Boll指标</param>
         /// <param name="percentage">开口/收口百分比</param>
-        public BollOpenSignal (BollingerBands Boll, double percentage) {
+        public BollOpenSignal (Boll Boll, double percentage) {
             _Boll = Boll;
             _per = percentage;
             _Boll.OnData += main;
@@ -25,7 +25,7 @@ namespace QuantX.Signal {
         /// <param name="Boll">Boll指标</param>
         /// <param name="percentage">开口/收口百分比</param>
         /// <returns>信号实例</returns>
-        public static BollOpenSignal GetInstance(BollingerBands Boll, double percentage) {
+        public static BollOpenSignal GetInstance(Boll Boll, double percentage) {
             foreach (var x in _instances) {
                 if (Boll.Equals(x._Boll) && percentage.Equals(x._per)) {
                     return x;
@@ -36,7 +36,7 @@ namespace QuantX.Signal {
             return ins;
         }
 
-        private void main (object sender, BollingerBandsData e) {
+        private void main (object sender, BollData e) {
             if (bufHistory.LastOrDefault()) {
                 #region 现处于开口状态
                 #region 更新最大值
@@ -100,7 +100,7 @@ namespace QuantX.Signal {
         /// </summary>
         public event EventHandler OnTrue;
         private List<bool> bufHistory = new List<bool>();
-        private BollingerBands _Boll;
+        private Boll _Boll;
         private double _per;
 
         private int idxOpen = 0;

@@ -7,14 +7,14 @@ namespace QuantX.TI {
     /// <summary>
     /// Boll 线数据类
     /// </summary>
-    public class BollingerBandsData {
+    public class BollData {
         /// <summary>
         /// 构造 Boll 数据实例
         /// </summary>
         /// <param name="upper">上轨</param>
         /// <param name="middle">中轨</param>
         /// <param name="lower">下轨</param>
-        public BollingerBandsData(double upper, double middle, double lower) {
+        public BollData(double upper, double middle, double lower) {
             if (upper < middle || middle < lower) {
                 throw new Exception("Boll Data Invalid");
             }
@@ -46,18 +46,18 @@ namespace QuantX.TI {
     /// <summary>
     /// Boll 指标
     /// </summary>
-    public class BollingerBands : ITI<BollingerBandsData> {
+    public class Boll : ITI<BollData> {
         /// <summary>
         /// 基于 TI 计算 period 周期 K 倍标准差的 Boll 指标
         /// </summary>
         /// <param name="TI">基础指标</param>
         /// <param name="N">Boll周期</param>
         /// <param name="K">标准差倍数</param>
-        public BollingerBands (ITI<double> TI, int N, double K) {
+        public Boll (ITI<double> TI, int N, double K) {
             _TI = TI;
             _N = N;
             _K = K;
-            _MA = SimpleMovingAverage.GetInstance(TI, N);
+            _MA = SMA.GetInstance(TI, N);
             _STDVAR = StdVar.GetInstance(TI, N);
             //_TI.OnData += main;
             //_MA.OnData += main;
@@ -69,7 +69,7 @@ namespace QuantX.TI {
             for (int i = bufHistory.Count; i < cc; i++) {
                 double avg = _MA.History[i];
                 double stdVar = _STDVAR.History[i];
-                bufHistory.Add(new BollingerBandsData(avg + _K * stdVar, avg, avg - _K * stdVar));
+                bufHistory.Add(new BollData(avg + _K * stdVar, avg, avg - _K * stdVar));
                 OnData?.Invoke(this, bufHistory.Last());
             }
         }
@@ -81,20 +81,20 @@ namespace QuantX.TI {
         /// <param name="N">周期</param>
         /// <param name="K">标准差倍数</param>
         /// <returns>Boll 指标实例</returns>
-        public static BollingerBands GetInstance(ITI<double> TI, int N, double K) {
+        public static Boll GetInstance(ITI<double> TI, int N, double K) {
             foreach(var x in _instances) {
                 if (TI.Equals(x._TI) && N.Equals(x._N) && K.Equals(x._K)) {
                     return x;
                 }
             }
-            var ret = new BollingerBands(TI, N, K);
+            var ret = new Boll(TI, N, K);
             _instances.Add(ret);
             return ret;
         }
         /// <summary>
         /// Boll 历史数据
         /// </summary>
-        public IReadOnlyList<BollingerBandsData> History {
+        public IReadOnlyList<BollData> History {
             get {
                 return bufHistory;
             }
@@ -102,7 +102,7 @@ namespace QuantX.TI {
         /// <summary>
         /// 实例池
         /// </summary>
-        public static IEnumerable<BollingerBands> Instances {
+        public static IEnumerable<Boll> Instances {
             get {
                 return _instances;
             }
@@ -110,15 +110,15 @@ namespace QuantX.TI {
         /// <summary>
         /// 新的 Boll 数据发生事件
         /// </summary>
-        public event EventHandler<BollingerBandsData> OnData;
-        private List<BollingerBandsData> bufHistory = new List<BollingerBandsData>();
+        public event EventHandler<BollData> OnData;
+        private List<BollData> bufHistory = new List<BollData>();
         private ITI<double> _TI;
         private int _N;
         private double _K;
-        private SimpleMovingAverage _MA;
+        private SMA _MA;
         private StdVar _STDVAR;
 
-        private static HashSet<BollingerBands> _instances = new HashSet<BollingerBands>();
+        private static HashSet<Boll> _instances = new HashSet<Boll>();
     }
 }
 namespace QuantX {
@@ -130,8 +130,8 @@ namespace QuantX {
         /// <param name="N">周期</param>
         /// <param name="K">标准差倍数</param>
         /// <returns>Boll 指标实例</returns>
-        public static TI.BollingerBands Boll (this ITI<double> ti, int N, double K) {
-            return TI.BollingerBands.GetInstance(ti, N, K);
+        public static TI.Boll Boll (this ITI<double> ti, int N, double K) {
+            return TI.Boll.GetInstance(ti, N, K);
         }
     }
 }
