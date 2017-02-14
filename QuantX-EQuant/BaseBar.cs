@@ -61,7 +61,7 @@ namespace QuantX {
     /// <summary>
     /// 拓展方法类
     /// </summary>
-    public static partial class Extension {
+    public static partial class EQuantExtension {
         /// <summary>
         /// 链式构造 BaseBar 实例
         /// </summary>

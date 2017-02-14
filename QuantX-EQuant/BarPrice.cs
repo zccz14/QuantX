@@ -109,7 +109,7 @@ namespace QuantX.TI {
     }
 }
 namespace QuantX {
-    public static partial class Extension {
+    public static partial class EQuantExtension {
         /// <summary>
         /// 链式构造：OpenPrice
         /// </summary>
