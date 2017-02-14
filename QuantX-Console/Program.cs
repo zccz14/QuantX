@@ -37,6 +37,7 @@ namespace QuantX_Console {
                 double price = double.Parse(Console.ReadLine());
                 iS.Add(price);
                 var MA = iS.SMA(3);
+                MACDData a = iS.MACD(12, 26, 9);
                 Console.WriteLine("MAIns:{0} Length:{1}", SMA.Instances.Count(), iS.History.Count());
                 Console.WriteLine("{0}", Extension.isBackAdjusted(0, 2, 1, 0.5));
             }

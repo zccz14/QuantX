@@ -95,3 +95,17 @@ namespace QuantX.TI {
         private static HashSet<PC> _instances = new HashSet<PC>();
     }
 }
+namespace QuantX {
+    public static partial class Extension {
+        /// <summary>
+        /// 获取 PC 实例
+        /// </summary>
+        /// <param name="Price">价格指标</param>
+        /// <param name="Vol">波动率</param>
+        /// <param name="Circulation">流通盘</param>
+        /// <returns>PC实例</returns>
+        public static TI.PC PC(this ITI<double> Price, TI.Volatility Vol, double Circulation) {
+            return TI.PC.GetInstance(Price, Vol, Circulation);
+        }
+    }
+}
