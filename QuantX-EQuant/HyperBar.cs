@@ -73,3 +73,16 @@ namespace QuantX.TI {
         private ITI<EQuant.BarType> BaseBar;
     }
 }
+namespace QuantX {
+    public static partial class EQuantExtension {
+        /// <summary>
+        /// 链式构造：HyperBar
+        /// </summary>
+        /// <param name="Source">源</param>
+        /// <param name="Period">周期</param>
+        /// <returns>HyperBar 实例</returns>
+        public static TI.HyperBar HyperBar (this ITI<EQuant.BarType> Source, int Period) {
+            return TI.HyperBar.GetInstance(Source, Period);
+        }
+    }
+}

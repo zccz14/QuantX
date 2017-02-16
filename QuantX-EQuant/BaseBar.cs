@@ -56,3 +56,19 @@ namespace QuantX.TI {
         private static HashSet<BaseBar> _instances = new HashSet<BaseBar>();
     }
 }
+
+namespace QuantX {
+    /// <summary>
+    /// 拓展方法类
+    /// </summary>
+    public static partial class EQuantExtension {
+        /// <summary>
+        /// 链式构造 BaseBar 实例
+        /// </summary>
+        /// <param name="exe">合约执行器</param>
+        /// <returns>BaseBar 实例</returns>
+        public static TI.BaseBar BaseBar (this EQuant.STG.ContractExecuter exe) {
+            return TI.BaseBar.GetInstance(exe);
+        }
+    }
+}

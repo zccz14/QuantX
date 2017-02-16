@@ -10,7 +10,15 @@ namespace QuantX_Console {
     class Program {
         static void Main (string[] args) {
             var iS = new Sequence<double>();
-            iS.SMA(20).OnData += (sender, e) => {
+            for (int i = 0; i < 20; i++) {
+                var a = iS.SMA(2);
+            }
+            iS.SMA(20).SMA(2).OnData += (sender, e) => {
+                if (iS.SMA(2) > iS.SMA(4)) {
+                    Console.WriteLine("Up");
+                } else {
+                    Console.WriteLine("Down");
+                }
                 Console.WriteLine("{1} Data => {0}", e, sender);
             };
             iS.StdVar(20).OnData += (sender, e) => {
@@ -29,10 +37,12 @@ namespace QuantX_Console {
                 iS.Add(x);
             }
             while (true) {
+
                 double price = double.Parse(Console.ReadLine());
                 iS.Add(price);
-                var MA = iS.SMA(2);
-                Console.WriteLine("MAIns:{0} Length:{1}", SimpleMovingAverage.Instances.Count(), iS.History.Count());
+                var MA = iS.SMA(3);
+                MACDData a = iS.MACD(12, 26, 9);
+                Console.WriteLine("MAIns:{0} Length:{1}", SMA.Instances.Count(), iS.History.Count());
                 Console.WriteLine("{0}", Extension.isBackAdjusted(0, 2, 1, 0.5));
             }
         }

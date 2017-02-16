@@ -40,17 +40,48 @@ namespace QuantX.Signal {
         /// 有效事件
         /// </summary>
         public event EventHandler OnTrue;
-
+        /// <summary>
+        /// 详细数据
+        /// </summary>
+        public class EventArgs : System.EventArgs {
+            /// <summary>
+            /// 最大位置
+            /// </summary>
+            public int idxMax;
+            /// <summary>
+            /// 最小位置
+            /// </summary>
+            public int idxMin;
+            /// <summary>
+            /// 判定结果
+            /// </summary>
+            public bool result;
+        }
         private void main (object sender, double data) {
-            int count = Math.Min(period, bufHistory.Count + 1 - _lastCount);
-            double high = Source.History.Last(count).Max();
-            double low = Source.History.Last(count).Min();
-            bufHistory.Add(high - data > diff || data - low > diff);
+            int idxMax = _lastCount, idxMin = _lastCount;
+            #region 查找 [_lastCount, Count) 范围内的最值点
+            for (int i = _lastCount; i < Source.History.Count; i++) {
+                if (Source.History[i] > Source.History[idxMax]) {
+                    idxMax = i;
+                }
+                if (Source.History[i] < Source.History[idxMin]) {
+                    idxMin = i;
+                }
+            }
+            #endregion
+            double high = Source.History[idxMax];
+            double low = Source.History[idxMin];
+            bool result = high - data > diff || data - low > diff;
+            bufHistory.Add(result);
+            EventArgs arg = new EventArgs();
+            arg.idxMax = idxMax;
+            arg.idxMin = idxMin;
+            arg.result = result;
             if (bufHistory.Last()) {
                 _lastCount = bufHistory.Count;
-                OnTrue?.Invoke(this, null);
+                OnTrue?.Invoke(this, arg);
             } else {
-                OnFalse?.Invoke(this, null);
+                OnFalse?.Invoke(this, arg);
             }
             OnData?.Invoke(this, bufHistory.Last());
         }
