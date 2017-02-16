@@ -104,5 +104,8 @@ namespace QuantX {
         public static double DiffRatio(double from, double to) {
             return (to - from) / from;
         }
+        public static double Abs(this double num) {
+            return Math.Abs(num);
+        }
     }
 }
