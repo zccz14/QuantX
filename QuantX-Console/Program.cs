@@ -10,6 +10,9 @@ namespace QuantX_Console {
     class Program {
         static void Main (string[] args) {
             var iS = new Sequence<double>();
+            for (int i = 0; i < 20; i++) {
+                var a = iS.SMA(2);
+            }
             iS.SMA(20).SMA(2).OnData += (sender, e) => {
                 if (iS.SMA(2) > iS.SMA(4)) {
                     Console.WriteLine("Up");
@@ -34,6 +37,7 @@ namespace QuantX_Console {
                 iS.Add(x);
             }
             while (true) {
+
                 double price = double.Parse(Console.ReadLine());
                 iS.Add(price);
                 var MA = iS.SMA(3);

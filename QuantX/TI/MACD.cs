@@ -64,7 +64,7 @@ namespace QuantX.TI {
         /// </summary>
         /// <param name="x">MACD 指标</param>
         public static implicit operator MACDData (MACD x) {
-            return x.History.Last();
+            return x.History.LastOrDefault();
         }
         /// <summary>
         /// 历史数据
