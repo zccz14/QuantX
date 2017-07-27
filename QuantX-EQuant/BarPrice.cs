@@ -107,24 +107,145 @@ namespace QuantX.TI {
         public static IEnumerable<OpenPrice> Instances { get { return _instances; } }
         private static HashSet<OpenPrice> _instances = new HashSet<OpenPrice>();
     }
+	/// <summary>
+	/// 收盘价指标
+	/// </summary>
+	public class HighPrice : ITI<double> {
+		/// <summary>
+		/// 根据 BarType 类型的指标取收盘价
+		/// </summary>
+		/// <param name="Bar">价格技术指标</param>
+		public HighPrice (ITI<EQuant.BarType> Bar) {
+			this.Bar = Bar;
+			this.Bar.OnData += main;
+		}
+
+		private void main (object sender, EQuant.BarType e) {
+			bufHistory.Add(e.MaxPrice);
+			double a = bufHistory.Last();
+			OnData?.Invoke(this, a);
+		}
+		/// <summary>
+		/// 历史数据
+		/// </summary>
+		public IReadOnlyList<double> History {
+			get {
+				return bufHistory;
+			}
+		}
+		/// <summary>
+		/// 数据事件
+		/// </summary>
+		public event EventHandler<double> OnData;
+		private List<double> bufHistory = new List<double>();
+		private ITI<EQuant.BarType> Bar;
+		/// <summary>
+		/// 获取实例
+		/// </summary>
+		/// <param name="Bar">BarType 指标</param>
+		/// <returns>实例</returns>
+		public static HighPrice GetInstance (ITI<EQuant.BarType> Bar) {
+			foreach (var x in _instances) {
+				if (Bar.Equals(x.Bar)) {
+					return x;
+				}
+			}
+			var ins = new HighPrice(Bar);
+			_instances.Add(ins);
+			return ins;
+		}
+		/// <summary>
+		/// 实例池
+		/// </summary>
+		public static IEnumerable<HighPrice> Instances { get { return _instances; } }
+		private static HashSet<HighPrice> _instances = new HashSet<HighPrice>();
+	}
+	/// <summary>
+	/// 收盘价指标
+	/// </summary>
+	public class LowPrice : ITI<double> {
+		/// <summary>
+		/// 根据 BarType 类型的指标取收盘价
+		/// </summary>
+		/// <param name="Bar">价格技术指标</param>
+		public LowPrice (ITI<EQuant.BarType> Bar) {
+			this.Bar = Bar;
+			this.Bar.OnData += main;
+		}
+
+		private void main (object sender, EQuant.BarType e) {
+			bufHistory.Add(e.MinPrice);
+			OnData?.Invoke(this, bufHistory.Last());
+		}
+		/// <summary>
+		/// 历史数据
+		/// </summary>
+		public IReadOnlyList<double> History {
+			get {
+				return bufHistory;
+			}
+		}
+		/// <summary>
+		/// 数据事件
+		/// </summary>
+		public event EventHandler<double> OnData;
+		private List<double> bufHistory = new List<double>();
+		private ITI<EQuant.BarType> Bar;
+		/// <summary>
+		/// 获取实例
+		/// </summary>
+		/// <param name="Bar">BarType 指标</param>
+		/// <returns>实例</returns>
+		public static LowPrice GetInstance (ITI<EQuant.BarType> Bar) {
+			foreach (var x in _instances) {
+				if (Bar.Equals(x.Bar)) {
+					return x;
+				}
+			}
+			var ins = new LowPrice(Bar);
+			_instances.Add(ins);
+			return ins;
+		}
+		/// <summary>
+		/// 实例池
+		/// </summary>
+		public static IEnumerable<LowPrice> Instances { get { return _instances; } }
+		private static HashSet<LowPrice> _instances = new HashSet<LowPrice>();
+	}
 }
 namespace QuantX {
     public static partial class EQuantExtension {
-        /// <summary>
-        /// 链式构造：OpenPrice
-        /// </summary>
-        /// <param name="Source">源</param>
-        /// <returns>OpenPrice 实例</returns>
-        public static TI.OpenPrice OpenPrice (this ITI<EQuant.BarType> Source) {
-            return TI.OpenPrice.GetInstance(Source);
-        }
-        /// <summary>
-        /// 链式构造：ClosePrice
-        /// </summary>
-        /// <param name="Source">源</param>
-        /// <returns>ClosePrice 实例</returns>
-        public static TI.ClosePrice ClosePrice (this ITI<EQuant.BarType> Source) {
-            return TI.ClosePrice.GetInstance(Source);
-        }
-    }
+		/// <summary>
+		/// 链式构造：OpenPrice
+		/// </summary>
+		/// <param name="Source">源</param>
+		/// <returns>OpenPrice 实例</returns>
+		public static TI.OpenPrice OpenPrice (this ITI<EQuant.BarType> Source) {
+			return TI.OpenPrice.GetInstance(Source);
+		}
+		/// <summary>
+		/// 链式构造：ClosePrice
+		/// </summary>
+		/// <param name="Source">源</param>
+		/// <returns>ClosePrice 实例</returns>
+		public static TI.ClosePrice ClosePrice (this ITI<EQuant.BarType> Source) {
+			return TI.ClosePrice.GetInstance(Source);
+		}
+		/// <summary>
+		/// 链式构造：HighPrice
+		/// </summary>
+		/// <param name="Source">源</param>
+		/// <returns>HighPrice 实例</returns>
+		public static TI.HighPrice HighPrice (this ITI<EQuant.BarType> Source) {
+			return TI.HighPrice.GetInstance(Source);
+		}
+		/// <summary>
+		/// 链式构造：LowPrice
+		/// </summary>
+		/// <param name="Source">源</param>
+		/// <returns>LowPrice 实例</returns>
+		public static TI.LowPrice LowPrice (this ITI<EQuant.BarType> Source) {
+			return TI.LowPrice.GetInstance(Source);
+		}
+	}
 }
