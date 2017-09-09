@@ -59,7 +59,7 @@ Several technical indexes have to listen to multiple sources, but we can still s
 
 ```c#
 public partial class TechnicalIndex {
-    public TechnicalIndex Bind(TechnicalIndex source, int time) { /* ...return this */ }
+    public TechnicalIndex Bind(TechnicalIndex source, int time = 1) { /* ...return this */ }
 }
 ```
 

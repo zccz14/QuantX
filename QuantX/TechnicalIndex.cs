@@ -45,7 +45,7 @@ namespace QuantX
 
 		private static int RelativeTime(TechnicalIndex thisIndex, TechnicalIndex thatIndex) => thisIndex.Time / thatIndex.Time;
 
-		public TechnicalIndex Bind(TechnicalIndex index, int time)
+		public TechnicalIndex Bind(TechnicalIndex index, int time = 1)
 		{
 			if (Source != null)
 			{
