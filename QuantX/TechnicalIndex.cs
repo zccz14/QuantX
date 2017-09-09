@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -93,12 +94,12 @@ namespace QuantX
 			}
 		}
 	}
-	public class TechnicalIndex<T> : TechnicalIndex, IReadonlyList<T>
+	public class TechnicalIndex<T> : TechnicalIndex, IReadOnlyList<T>
 	{
 		protected List<T> History = new List<T>();
 		public T this[int index] => History[index];
     public int Count => History.Count;
-    public IEnumerator<T> GetEnumerator() => History.GetEnumerator();
-    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+		public IEnumerator<T> GetEnumerator() => History.GetEnumerator();
+		IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 	}
 }
