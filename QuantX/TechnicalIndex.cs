@@ -45,22 +45,37 @@ namespace QuantX
 
 		private static int RelativeTime(TechnicalIndex thisIndex, TechnicalIndex thatIndex) => thisIndex.Time / thatIndex.Time;
 
-		public TechnicalIndex Regist(TechnicalIndex index, int time)
+		public TechnicalIndex Bind(TechnicalIndex index, int time)
 		{
 			if (Source != null)
 			{
-				var newSource = LCA(Source, index); // equivalent source
-				// re-subscribe
+				if (Source.Root != index.Root) {
+					throw new Exception("LCA invalid");
+				}
+				var lca = LCA(Source, index); // equivalent source
+				// rebind
 				Source.Update -= OnSourceOnUpdate;
-				newSource.Update += OnSourceOnUpdate;
+				lca.Update += OnSourceOnUpdate;
 				// re-assign member
-				TimeScalar = Math.Max(RelativeTime(Source, newSource) * TimeScalar, val2: time);
-				Source = newSource;
-			} else
+				TimeScalar = Math.Max(RelativeTime(Source, lca) * TimeScalar, time);
+				Source = lca;
+			}
+			else
 			{
 				Source = index;
 				TimeScalar = time;
 				Source.Update += OnSourceOnUpdate;
+			}
+			return this;
+		}
+
+		public TechnicalIndex ResetBinding()
+		{
+			if (Source != null)
+			{
+				Source.Update -= OnSourceOnUpdate;
+				Source = null;
+				TimeScalar = 1;
 			}
 			return this;
 		}
