@@ -9,7 +9,12 @@ namespace QuantX
 		public TechnicalIndex Source { get; private set; }
 		public int TimeScalar { get; private set; } = 1;
 		public event EventHandler Update;
-		protected void OnUpdate() => Update?.Invoke(this, EventArgs.Empty);
+		private int UpdateCount { get; set; }
+		protected void OnUpdate()
+		{
+			UpdateCount++;
+			Update?.Invoke(this, EventArgs.Empty);
+		}
 
 		public TechnicalIndex Root => Source == null ? this : Source.Root;
 		public int Time => TimeScalar * Source?.Time ?? TimeScalar;
@@ -80,14 +85,20 @@ namespace QuantX
 			return this;
 		}
 
-		private int Count { get; set; }
 		private void OnSourceOnUpdate(object sender, EventArgs args)
 		{
-			Count++;
-			if (Count % TimeScalar == 0)
+			if (Source.UpdateCount % TimeScalar == 0)
 			{
 				Main();
 			}
 		}
+	}
+	public class TechnicalIndex<T> : TechnicalIndex, IReadonlyList<T>
+	{
+		protected List<T> History = new List<T>();
+		public T this[int index] => History[index];
+    public int Count => History.Count;
+    public IEnumerator<T> GetEnumerator() => History.GetEnumerator();
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 	}
 }
