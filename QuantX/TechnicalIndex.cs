@@ -10,8 +10,8 @@ namespace QuantX
 		public TechnicalIndex Source { get; private set; }
 		public int TimeScalar { get; private set; } = 1;
 		public event EventHandler Update;
-		private int UpdateCount { get; set; }
-		protected void OnUpdate()
+		public int UpdateCount { get; private set; }
+		public void OnUpdate()
 		{
 			UpdateCount++;
 			Update?.Invoke(this, EventArgs.Empty);
@@ -23,6 +23,10 @@ namespace QuantX
 
 		protected virtual void Main()
 		{
+			if (Source.UpdateCount % TimeScalar == 0)
+			{
+				OnUpdate();
+			}
 		}
 
 		private static TechnicalIndex LCA(TechnicalIndex u, TechnicalIndex v)
@@ -63,7 +67,7 @@ namespace QuantX
 				Source.Update -= OnSourceOnUpdate;
 				lca.Update += OnSourceOnUpdate;
 				// re-assign member
-				TimeScalar = Math.Max(RelativeTime(Source, lca) * TimeScalar, time);
+				TimeScalar = Math.Max(RelativeTime(Source, lca) * TimeScalar, RelativeTime(index, lca) * time);
 				Source = lca;
 			}
 			else
@@ -88,10 +92,7 @@ namespace QuantX
 
 		private void OnSourceOnUpdate(object sender, EventArgs args)
 		{
-			if (Source.UpdateCount % TimeScalar == 0)
-			{
 				Main();
-			}
 		}
 	}
 	public class TechnicalIndex<T> : TechnicalIndex, IReadOnlyList<T>
