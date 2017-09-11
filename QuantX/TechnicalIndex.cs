@@ -37,8 +37,6 @@ namespace QuantX
 			{
 				v = v.Source;
 				u = u.Source;
-				du--;
-				dv--;
 			}
 			return u;
 		}
