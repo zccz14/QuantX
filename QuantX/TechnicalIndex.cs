@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,7 +10,12 @@ namespace QuantX
 		public TechnicalIndex Source { get; private set; }
 		public int TimeScalar { get; private set; } = 1;
 		public event EventHandler Update;
-		protected void OnUpdate() => Update?.Invoke(this, EventArgs.Empty);
+		public int UpdateCount { get; private set; }
+		public void OnUpdate()
+		{
+			UpdateCount++;
+			Update?.Invoke(this, EventArgs.Empty);
+		}
 
 		public TechnicalIndex Root => Source == null ? this : Source.Root;
 		public int Time => TimeScalar * Source?.Time ?? TimeScalar;
@@ -17,6 +23,10 @@ namespace QuantX
 
 		protected virtual void Main()
 		{
+			if (Source.UpdateCount % TimeScalar == 0)
+			{
+				OnUpdate();
+			}
 		}
 
 		private static TechnicalIndex LCA(TechnicalIndex u, TechnicalIndex v)
@@ -43,18 +53,22 @@ namespace QuantX
 
 		private static int RelativeTime(TechnicalIndex thisIndex, TechnicalIndex thatIndex) => thisIndex.Time / thatIndex.Time;
 
-		public TechnicalIndex Regist(TechnicalIndex index, int time)
+		public TechnicalIndex Bind(TechnicalIndex index, int time = 1)
 		{
 			if (Source != null)
 			{
-				var newSource = LCA(Source, index); // equivalent source
-				// re-subscribe
+				if (Source.Root != index.Root) {
+					throw new Exception("LCA invalid");
+				}
+				var lca = LCA(Source, index); // equivalent source
+				// rebind
 				Source.Update -= OnSourceOnUpdate;
-				newSource.Update += OnSourceOnUpdate;
+				lca.Update += OnSourceOnUpdate;
 				// re-assign member
-				TimeScalar = Math.Max(RelativeTime(Source, newSource) * TimeScalar, val2: time);
-				Source = newSource;
-			} else
+				TimeScalar = Math.Max(RelativeTime(Source, lca) * TimeScalar, RelativeTime(index, lca) * time);
+				Source = lca;
+			}
+			else
 			{
 				Source = index;
 				TimeScalar = time;
@@ -63,14 +77,28 @@ namespace QuantX
 			return this;
 		}
 
-		private int Count { get; set; }
+		public TechnicalIndex ResetBinding()
+		{
+			if (Source != null)
+			{
+				Source.Update -= OnSourceOnUpdate;
+				Source = null;
+				TimeScalar = 1;
+			}
+			return this;
+		}
+
 		private void OnSourceOnUpdate(object sender, EventArgs args)
 		{
-			Count++;
-			if (Count % TimeScalar == 0)
-			{
 				Main();
-			}
 		}
+	}
+	public class TechnicalIndex<T> : TechnicalIndex, IReadOnlyList<T>
+	{
+		protected List<T> History = new List<T>();
+		public T this[int index] => History[index];
+    public int Count => History.Count;
+		public IEnumerator<T> GetEnumerator() => History.GetEnumerator();
+		IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 	}
 }
